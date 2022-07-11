@@ -46,6 +46,7 @@ protected:
 
     QRectF firstHandleRect() const;
     QRectF secondHandleRect() const;
+    QRectF selectedHandleRect() const;
     QRectF handleRect(int aValue) const;
 
 signals:
@@ -56,6 +57,7 @@ signals:
 public slots:
     void setLowerValue(int aLowerValue);
     void setUpperValue(int aUpperValue);
+    void setSelectedValue(int aSelectedValue);
     void setMinimum(int aMinimum);
     void setMaximum(int aMaximum);
 
@@ -70,13 +72,17 @@ private:
     int mUpperValue;
     bool mFirstHandlePressed;
     bool mSecondHandlePressed;
+    bool mSelectedHandlePressed;
     int mInterval;
-    int mDelta;
+    int mDelta;  // 当鼠标左键点下时，mDelta为鼠标点下的位置和滑块中心的距离
     QColor mBackgroudColorEnabled;
     QColor mBackgroudColorDisabled;
     QColor mBackgroudColor;
     Qt::Orientation orientation;
     Options type;
+
+    int mSelectedValue_;
+    QRectF mSelectedHandle_;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(RangeSlider::Options)
