@@ -9,7 +9,8 @@ class circleRound : public QWidget
     Q_OBJECT
 public:
     explicit circleRound(QWidget *parent = nullptr);
-
+    ~circleRound();
+    const static double PI;
 protected:
     void paintEvent(QPaintEvent* aEvent) override;
     void mousePressEvent(QMouseEvent* aEvent) override;
@@ -20,21 +21,20 @@ signals:
 
 private:
     bool isContained(int x, int y) const{
-        double distance = sqrt(qPow(x - circleCenter_.x(), 2) + qPow(y - circleCenter_.y(), 2));
+        double distance = sqrt(qPow(x, 2) + qPow(y, 2));
         return distance <= radius_;
     }
-    void setDestPoint(int x, int y);
-
-    void getAngle(int x, int y) const;
+    void setAngle(int startAngle);
+    double getAngle(int x, int y) const;
+    void transCoor(int& x, int& y);  // 将原来窗口的坐标转化自定义的画图坐标
+    QPointF getCircleCenter() const;
+    QRectF getPackRectF() const;
+    int getRadius() const;
 
     qreal radius_;
-    QPointF circleCenter_;
-    // 画出的半径，起点和终点的坐标
-    QPointF srcPoint_;
-    QPointF destPoint_;
-
-
-    QPainter *painter_;
+    int startAngle_;  // 圆饼开始的角度
+    int spanAngle_;   // 援兵覆盖的角度
+    double userAngle_;  // 用户设置的角度
 };
 
 #endif // CIRCLEROUND_H

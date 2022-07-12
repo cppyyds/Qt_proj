@@ -22,6 +22,6 @@ private:
 
     circleRound *circleRound_;
     QWidget *widget_;
-    QHBoxLayout *layout_;
+    QVBoxLayout *layout_;
 };
 #endif // MAINWINDOW_H

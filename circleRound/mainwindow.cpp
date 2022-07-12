@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDesktopWidget>
+#include <QDebug>
+#include <QVBoxLayout>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -8,24 +10,27 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-
     widget_ = new QWidget(this);
-    layout_ = new QHBoxLayout();
-
     circleRound_ = new circleRound();
+
+    layout_ = new QVBoxLayout();
     layout_->addWidget(circleRound_);
 
     widget_->setLayout(layout_);
     setCentralWidget(widget_);
-    resize(QDesktopWidget().availableGeometry(this).size() * 0.9);
+    // resize(QDesktopWidget().availableGeometry(this).size() * 0.9);
 
 }
 
 MainWindow::~MainWindow()
 {
-    delete widget_;
-    delete circleRound_;
-    delete layout_;
-    delete ui;
+    if (widget_) delete widget_;
+    if (circleRound_) delete circleRound_;
+    if(layout_) delete layout_;
+    if(ui) delete ui;
+    widget_ = nullptr;
+    circleRound_ = nullptr;
+    layout_ = nullptr;
+    ui = nullptr;
 }
 
