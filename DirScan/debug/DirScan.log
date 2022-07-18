@@ -1,0 +1,6 @@
+﻿  mainwindow.cpp
+D:\source code\Qt\DirScan\mainwindow.cpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+D:\source code\Qt\DirScan\mainwindow.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+D:\source code\Qt\DirScan\mainwindow.cpp(46,41): warning C4100: “strRootPath”: 未引用的形参
+D:\source code\Qt\DirScan\mainwindow.cpp(136,56): warning C4100: “index”: 未引用的形参
+  DirScan.vcxproj -> D:\source code\Qt\DirScan\debug\DirScan.exe
