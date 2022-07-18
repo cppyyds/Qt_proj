@@ -2,10 +2,15 @@
 #include "ui_mainwindow.h"
 #include "dirscan.h"
 
+#include <qtextcodec.h>
+
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("GB2312"));
     ui->setupUi(this);
 
     ui->treeWidget->setColumnCount(1);
@@ -96,15 +101,19 @@ void MainWindow::addItem(const QString& parentPath, const QFileInfo& itemInfo, b
 void MainWindow::onCustomContextMenuRequested(const QPoint& point)
 {
     auto* item = ui->treeWidget->itemAt(point);
-    QRegExp reg("[A-D]:/");
-    if (item->text(0) != tr("我的电脑") && item->text(0) != QString::Reg) {
-        QAction* pDelAction = new QAction("删除", this);
+    QRegExp reg("([A-D]):/");
+    int pos = 0;
+    if (item != nullptr)
+        pos = reg.indexIn(item->text(0));
+    // 当结点不为"我的电脑"或磁盘名时
+    if (item != nullptr && item->text(0) != tr("我的电脑") && pos <= -1) {
+    QAction* pDelAction = new QAction("删除", this);
         QMenu* popMenu = new QMenu(this);  // 定义⼀个右键弹出菜单
         popMenu->addAction(pDelAction);  // 往菜单内添加QAction 该action在前⾯⽤设计器定义了
-        popMenu->show();
-    }
+        popMenu->exec(QCursor::pos());
+     }
     
-    // popMenu->exec(QCursor::pos());  // 弹出右键菜单，菜单位置为光标位
+     //popMenu->exec(QCursor::pos());  // 弹出右键菜单，菜单位置为光标位
 }
 
 QString MainWindow::getAbsolutePath(QTreeWidgetItem *item, int col)
