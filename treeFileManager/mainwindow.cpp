@@ -1,8 +1,12 @@
+#include <qtextcodec.h>
+#include <QDir>
+#include <qDebug>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "dirscan.h"
 
-#include <qtextcodec.h>
+
 
 
 
@@ -10,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("GB2312"));
+    qDebug() << "MainWindow start";
+    //QTextCodec::setCodecForLocale(QTextCodec::codecForName("GB2312"));
     ui->setupUi(this);
 
     ui->treeWidget->setColumnCount(1);
@@ -24,7 +29,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(dirScan_, SIGNAL(ItemScanned(const QString&, const  QFileInfo&, bool)), this, SLOT(addItem(const QString&, const  QFileInfo&, bool)));
 
-    connect(ui->treeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(onCustomContextMenuRequested(const QPoint&)));
+    connect(ui->treeWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(popMenu(const QPoint&)));
+
     init();
 }
 
@@ -37,10 +43,86 @@ MainWindow::~MainWindow()
 void MainWindow::init()
 {
     QTreeWidgetItem *top = new QTreeWidgetItem(ui->treeWidget,  QStringList(QString(tr("我的电脑"))));
+    top->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable);
     QList<QTreeWidgetItem*> root;
     root.append(top);
     ui->treeWidget->insertTopLevelItems(0, root);
 }
+
+void MainWindow::deleteItem()
+{
+    qDebug() << "deleteItem";
+    auto* item = ui->treeWidget->currentItem();
+
+    QString path = getAbsolutePath(item, 0);
+    if (isDir(path)) deleteDir(path);
+    else {  // 如果是文件，直接删除
+        QFileInfo file(path);
+        file.dir().remove(file.fileName());
+    }
+
+    // item的父节点释放item
+    item->parent()->removeChild(item);
+    delete item;
+}
+
+void MainWindow::reNameItem()
+{
+    qDebug() << "reNameItem";
+    auto* item = ui->treeWidget->currentItem();
+
+    QString path = getAbsolutePath(item, 0);
+    //if (isDir(path)) reNameDir(path);
+    //else {
+    //    QFile file(path);
+    //    file.rename();
+    //}
+}
+
+bool MainWindow::deleteDir(const QString& path)
+{
+    if (path.isEmpty()) return false;
+    QDir dir(path);
+    if (!dir.exists()) return true;
+
+    // 有两种情况，1.路径path的目录已经加载为TreeItem 
+    // 2.还未加载为TreeItem，两种情况都要向下继续删除文件和目录
+    QTreeWidgetItem* item = nullptr;
+    if (dirToItem_.contains(path)) 
+        item = dirToItem_.find(path).value();
+
+    dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+    QFileInfoList fileList = dir.entryInfoList();
+    bool isDeletedOk = true;
+    for (auto& file: fileList) {
+        if (file.isFile()) {
+            isDeletedOk &= file.dir().remove(file.fileName());
+
+        }
+        else {
+            isDeletedOk &= deleteDir(file.absoluteFilePath().replace('/','\\'));
+        }
+    }
+
+    // 释放孩子结点的工作由父节点完成
+    if (item != nullptr) {
+        for (int i = 0; i < item->childCount(); ++i) {
+            auto* childItem = item->child(i);
+            item->removeChild(childItem);
+            delete childItem;
+        }
+        dirToItem_.erase(dirToItem_.find(path));
+    }
+
+    isDeletedOk &= dir.rmdir(dir.absolutePath());
+    return isDeletedOk;
+}
+
+bool MainWindow::isDir(const QString& path) const
+{
+    return dirToItem_.contains(path);
+}
+
 
 void MainWindow::ItemSelected(QTreeWidgetItem *item, int col)
 {
@@ -58,12 +140,14 @@ void MainWindow::addItem(const QString& parentPath, const QFileInfo& itemInfo, b
         QString fullPath = itemInfo.absolutePath().replace("/", "\\");
         if (isDrivers && !dirToItem_.contains(fullPath)) {
             QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget->findItems(QString(tr("我的电脑")), 0, 0).at(0), QStringList(itemInfo.filePath()));
-
+            item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable);
             dirToItem_.insert(fullPath, item);
         }
         else {
             QTreeWidgetItem *item = dirToItem_.value(fullPath);
             QTreeWidgetItem *subItem = new QTreeWidgetItem(QStringList(itemInfo.fileName()));
+            subItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable);
+
             int i = 0;
             for (; i < item->childCount(); ++i) {
                 if (!QString::compare(itemInfo.fileName(), item->child(i)->text(0))) {
@@ -98,7 +182,7 @@ void MainWindow::addItem(const QString& parentPath, const QFileInfo& itemInfo, b
 
 }
 
-void MainWindow::onCustomContextMenuRequested(const QPoint& point)
+void MainWindow::popMenu(const QPoint& point)
 {
     auto* item = ui->treeWidget->itemAt(point);
     QRegExp reg("([A-D]):/");
@@ -107,9 +191,15 @@ void MainWindow::onCustomContextMenuRequested(const QPoint& point)
         pos = reg.indexIn(item->text(0));
     // 当结点不为"我的电脑"或磁盘名时
     if (item != nullptr && item->text(0) != tr("我的电脑") && pos <= -1) {
-    QAction* pDelAction = new QAction("删除", this);
-        QMenu* popMenu = new QMenu(this);  // 定义⼀个右键弹出菜单
+        QAction *pDelAction = new QAction("Delete", this);
+        QAction *pReNameAction = new QAction("Rename", this);
+
+        connect(pDelAction, SIGNAL(triggered()), this, SLOT(deleteItem()));
+        connect(pReNameAction, SIGNAL(triggered()), this, SLOT(reNameItem()));
+
+        QMenu *popMenu = new QMenu(this);  // 定义⼀个右键弹出菜单
         popMenu->addAction(pDelAction);  // 往菜单内添加QAction 该action在前⾯⽤设计器定义了
+        popMenu->addAction(pReNameAction);
         popMenu->exec(QCursor::pos());
      }
     

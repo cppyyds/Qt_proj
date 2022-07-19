@@ -23,10 +23,14 @@ signals:
 public slots:
     void ItemSelected(QTreeWidgetItem* item, int col);
     void addItem(const QString& fullPath,const QFileInfo& file, bool);
-    void onCustomContextMenuRequested(const QPoint& point);
+    void popMenu(const QPoint& point);
+    void deleteItem();
+    void reNameItem();
 private:
     QString getAbsolutePath(QTreeWidgetItem* item, int col);
     void init();
+    bool deleteDir(const QString& path);
+    bool isDir(const QString&) const;
 
     Ui::MainWindow *ui;
     DirScan *dirScan_;
