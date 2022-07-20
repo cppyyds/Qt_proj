@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.32510.428
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "treeFileManager", "treeFileManager.vcxproj", "{75493138-2D75-3AFE-9425-C12325B5FE0C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PictureManager", "..\..\PictureManager\PictureManager.vcxproj", "{357271EC-CB80-30A4-BC32-40EBB5CF944F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -15,6 +17,10 @@ Global
 		{75493138-2D75-3AFE-9425-C12325B5FE0C}.Debug|x64.Build.0 = Debug|x64
 		{75493138-2D75-3AFE-9425-C12325B5FE0C}.Release|x64.ActiveCfg = Release|x64
 		{75493138-2D75-3AFE-9425-C12325B5FE0C}.Release|x64.Build.0 = Release|x64
+		{357271EC-CB80-30A4-BC32-40EBB5CF944F}.Debug|x64.ActiveCfg = Debug|x64
+		{357271EC-CB80-30A4-BC32-40EBB5CF944F}.Debug|x64.Build.0 = Debug|x64
+		{357271EC-CB80-30A4-BC32-40EBB5CF944F}.Release|x64.ActiveCfg = Release|x64
+		{357271EC-CB80-30A4-BC32-40EBB5CF944F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

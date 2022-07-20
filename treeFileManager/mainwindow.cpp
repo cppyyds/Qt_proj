@@ -43,7 +43,7 @@ MainWindow::~MainWindow()
 void MainWindow::init()
 {
     QTreeWidgetItem *top = new QTreeWidgetItem(ui->treeWidget,  QStringList(QString(tr("我的电脑"))));
-    top->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable);
+    //top->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable);
     QList<QTreeWidgetItem*> root;
     root.append(top);
     ui->treeWidget->insertTopLevelItems(0, root);
@@ -66,17 +66,43 @@ void MainWindow::deleteItem()
     delete item;
 }
 
-void MainWindow::reNameItem()
+void MainWindow::RenameItem()
 {
-    qDebug() << "reNameItem";
+    qDebug() << "RenameItem";
     auto* item = ui->treeWidget->currentItem();
+    before_ = item->text(0);
+    ui->treeWidget->editItem(item);
 
-    QString path = getAbsolutePath(item, 0);
-    //if (isDir(path)) reNameDir(path);
-    //else {
-    //    QFile file(path);
-    //    file.rename();
-    //}
+    connect(ui->treeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(RenameEntry(QTreeWidgetItem*)));
+}
+
+void MainWindow::RenameEntry(QTreeWidgetItem* item)
+{
+    Q_ASSERT(item == ui->treeWidget->currentItem());
+    QString after = item->text(0);
+    if (before_ == after) return;
+
+    QString newPath = getAbsolutePath(item, 0);
+    QString dirPath = newPath.mid(0, newPath.lastIndexOf('\\') + 1);
+    QString oldPath = dirPath + before_;
+
+    if (!isDir(oldPath)) { // 如果是文件的话，直接重命名然后返回
+        QFile file(oldPath);
+        Q_ASSERT(file.rename(after));
+        return;
+    }
+
+    QDir dir(dirPath);
+    dir.rename(before_, after);
+ 
+    Q_ASSERT(dirToItem_.contains(oldPath));
+    Q_ASSERT(item == dirToItem_.find(oldPath).value());
+
+    RecurChangePath(oldPath ,newPath);
+
+    // 避免第二次之后重命名出现问题，这句语句不能少
+    disconnect(ui->treeWidget, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(RenameEntry(QTreeWidgetItem*)));
+
 }
 
 bool MainWindow::deleteDir(const QString& path)
@@ -118,9 +144,28 @@ bool MainWindow::deleteDir(const QString& path)
     return isDeletedOk;
 }
 
-bool MainWindow::isDir(const QString& path) const
+inline bool MainWindow::isDir(const QString& path) const
 {
     return dirToItem_.contains(path);
+}
+
+void MainWindow::RecurChangePath(const QString& oldPath, const QString& newPath)
+{
+    if (!dirToItem_.contains(oldPath)) return;
+    auto it = dirToItem_.find(oldPath);
+    auto* item = it.value();
+    dirToItem_.erase(it);
+    dirToItem_.insert(newPath, item);
+
+    QDir dir(newPath);
+    QFileInfoList fileList = dir.entryInfoList();
+    for (auto& file : fileList) {
+        if (file.isDir()) {
+            QString subOldPath = oldPath + '\\' + file.fileName();
+            QString subNewPath = newPath + '\\' + file.fileName();
+            RecurChangePath(subOldPath, subNewPath);
+        }
+    }
 }
 
 
@@ -140,7 +185,7 @@ void MainWindow::addItem(const QString& parentPath, const QFileInfo& itemInfo, b
         QString fullPath = itemInfo.absolutePath().replace("/", "\\");
         if (isDrivers && !dirToItem_.contains(fullPath)) {
             QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget->findItems(QString(tr("我的电脑")), 0, 0).at(0), QStringList(itemInfo.filePath()));
-            item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable);
+            //item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable);
             dirToItem_.insert(fullPath, item);
         }
         else {
@@ -195,7 +240,7 @@ void MainWindow::popMenu(const QPoint& point)
         QAction *pReNameAction = new QAction("Rename", this);
 
         connect(pDelAction, SIGNAL(triggered()), this, SLOT(deleteItem()));
-        connect(pReNameAction, SIGNAL(triggered()), this, SLOT(reNameItem()));
+        connect(pReNameAction, SIGNAL(triggered()), this, SLOT(RenameItem()));
 
         QMenu *popMenu = new QMenu(this);  // 定义⼀个右键弹出菜单
         popMenu->addAction(pDelAction);  // 往菜单内添加QAction 该action在前⾯⽤设计器定义了

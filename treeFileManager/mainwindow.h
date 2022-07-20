@@ -25,16 +25,20 @@ public slots:
     void addItem(const QString& fullPath,const QFileInfo& file, bool);
     void popMenu(const QPoint& point);
     void deleteItem();
-    void reNameItem();
+    void RenameItem();
+    void RenameEntry(QTreeWidgetItem*);
 private:
     QString getAbsolutePath(QTreeWidgetItem* item, int col);
     void init();
     bool deleteDir(const QString& path);
     bool isDir(const QString&) const;
+    void RecurChangePath(const QString& oldPath, const QString& newPath);
 
     Ui::MainWindow *ui;
     DirScan *dirScan_;
 
     QHash<QString, QTreeWidgetItem*> dirToItem_;
+
+    QString before_; // 用于重命名操作
 };
 #endif // MAINWINDOW_H
