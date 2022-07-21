@@ -11,14 +11,17 @@ CONFIG += c++17
 SOURCES += \
     dirscan.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    treeDir.cpp
 
 HEADERS += \
     dirscan.h \
-    mainwindow.h
+    mainwindow.h \
+    treeDir.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    treeDir.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
