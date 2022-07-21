@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32510.428
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "media_temp", "media_temp.vcxproj", "{E9A6F028-4987-4B25-8D2B-245D52338179}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CameraFrame", "..\CameraFrame\CameraFrame.vcxproj", "{0D62C530-1005-42A7-87E8-137B6A001163}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "treeFileManager", "..\Qt_proj-DirScan\treeFileManager\treeFileManager.vcxproj", "{75493138-2D75-3AFE-9425-C12325B5FE0C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E9A6F028-4987-4B25-8D2B-245D52338179}.Debug|x64.ActiveCfg = Debug|x64
+		{E9A6F028-4987-4B25-8D2B-245D52338179}.Debug|x64.Build.0 = Debug|x64
+		{E9A6F028-4987-4B25-8D2B-245D52338179}.Release|x64.ActiveCfg = Release|x64
+		{E9A6F028-4987-4B25-8D2B-245D52338179}.Release|x64.Build.0 = Release|x64
+		{0D62C530-1005-42A7-87E8-137B6A001163}.Debug|x64.ActiveCfg = Debug|x64
+		{0D62C530-1005-42A7-87E8-137B6A001163}.Debug|x64.Build.0 = Debug|x64
+		{0D62C530-1005-42A7-87E8-137B6A001163}.Release|x64.ActiveCfg = Release|x64
+		{0D62C530-1005-42A7-87E8-137B6A001163}.Release|x64.Build.0 = Release|x64
+		{75493138-2D75-3AFE-9425-C12325B5FE0C}.Debug|x64.ActiveCfg = Debug|x64
+		{75493138-2D75-3AFE-9425-C12325B5FE0C}.Debug|x64.Build.0 = Debug|x64
+		{75493138-2D75-3AFE-9425-C12325B5FE0C}.Release|x64.ActiveCfg = Release|x64
+		{75493138-2D75-3AFE-9425-C12325B5FE0C}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E9916187-87C8-485F-A75D-9D78C54AC195}
+	EndGlobalSection
+EndGlobal
