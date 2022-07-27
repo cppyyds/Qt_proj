@@ -9,9 +9,9 @@ UIDemo08::UIDemo08(QWidget *parent) :
     ui(new Ui::UIDemo08)
 {
     ui->setupUi(this);
-    this->initForm();
-    this->initLeftMain();
-    this->initLeftConfig();
+    //this->initForm();
+//    this->initLeftMain();
+//    this->initLeftConfig();
 }
 
 UIDemo08::~UIDemo08()
@@ -24,7 +24,7 @@ void UIDemo08::initForm()
     this->setProperty("form", true);
     this->setProperty("canMove", true);
     this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
-
+    // right: 0xf073
     IconHelper::Instance()->setIcon(ui->labIco, QChar(0xf073), 30);
     IconHelper::Instance()->setIcon(ui->btnMenu_Min, QChar(0xf068));
     IconHelper::Instance()->setIcon(ui->btnMenu_Max, QChar(0xf067));
@@ -33,14 +33,14 @@ void UIDemo08::initForm()
     //ui->widgetMenu->setVisible(false);
     ui->widgetTitle->setProperty("form", "title");
     ui->widgetTop->setProperty("nav", "top");
-    ui->labTitle->setText("智能访客管理平台");
     ui->labTitle->setFont(QFont("Microsoft Yahei", 20));
+    ui->labTitle->setText("智能访客管理平台");
     this->setWindowTitle(ui->labTitle->text());
 
-    ui->stackedWidget->setStyleSheet("QLabel{font:60pt;}");
+    ui->stackedWidget->setStyleSheet("QLabel{font:20pt;}");
 
     QSize icoSize(32, 32);
-    int icoWidth = 85;
+    int icoWidth = 80;
 
     //设置顶部导航按钮
     QList<QToolButton *> tbtns = ui->widgetTop->findChildren<QToolButton *>();
@@ -58,7 +58,7 @@ void UIDemo08::initForm()
     ui->page1->setStyleSheet(QString("QWidget[flag=\"left\"] QAbstractButton{min-height:%1px;max-height:%1px;}").arg(60));
     ui->page2->setStyleSheet(QString("QWidget[flag=\"left\"] QAbstractButton{min-height:%1px;max-height:%1px;}").arg(20));
 }
-
+// 标题顶部的按钮点击事件
 void UIDemo08::buttonClick()
 {
     QToolButton *b = (QToolButton *)sender();

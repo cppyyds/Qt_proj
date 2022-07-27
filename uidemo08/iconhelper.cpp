@@ -1,10 +1,11 @@
 ﻿#include "iconhelper.h"
 
 IconHelper *IconHelper::self = 0;
+static QMutex mutex;
 IconHelper *IconHelper::Instance()
 {
     if (!self) {
-        QMutex mutex;
+
         QMutexLocker locker(&mutex);
         if (!self) {
             self = new IconHelper;
@@ -120,6 +121,7 @@ void IconHelper::setStyle(QWidget *widget, QList<QToolButton *> btns, QList<int>
         return;
     }
 
+    // 设置border的宽度
     QString strBorder;
     if (type == "top") {
         strBorder = QString("border-width:%1px 0px 0px 0px;padding:%1px %2px %2px %2px;")
@@ -144,7 +146,7 @@ void IconHelper::setStyle(QWidget *widget, QList<QToolButton *> btns, QList<int>
         qss.append(QString("QWidget[flag=\"%1\"] QAbstractButton{border-style:none;border-radius:0px;padding:5px;color:%2;background:%3;}")
                    .arg(type).arg(normalTextColor).arg(normalBgColor));
     }
-
+    // 设置进入按钮、按下按钮、check按钮的样式
     qss.append(QString("QWidget[flag=\"%1\"] QAbstractButton:hover,"
                        "QWidget[flag=\"%1\"] QAbstractButton:pressed,"
                        "QWidget[flag=\"%1\"] QAbstractButton:checked{"
@@ -168,7 +170,7 @@ void IconHelper::setStyle(QWidget *widget, QList<QToolButton *> btns, QList<int>
 
         btns.at(i)->setIcon(QIcon(pixNormal));
         btns.at(i)->setIconSize(QSize(iconWidth, iconHeight));
-        btns.at(i)->installEventFilter(this);
+        btns.at(i)->installEventFilter(this);   // 设置此IconHelper对象为按钮组eventFilter
 
         this->btns.append(btns.at(i));
         this->pixNormal.append(pixNormal);

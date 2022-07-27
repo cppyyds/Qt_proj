@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QTextCodec>
 #include <QFile>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -27,13 +28,14 @@ int main(int argc, char *argv[])
     if (file.open(QFile::ReadOnly)) {
         QString qss = QLatin1String(file.readAll());
         QString paletteColor = qss.mid(20, 7);
+        qDebug() << "color::::" << paletteColor;
         qApp->setPalette(QPalette(QColor(paletteColor)));
         qApp->setStyleSheet(qss);
         file.close();
     }
 
     a.setFont(QFont("Microsoft Yahei", 9));
-    AppInit::Instance()->start();
+    //AppInit::Instance()->start();
 
     UIDemo08 w;
     w.show();

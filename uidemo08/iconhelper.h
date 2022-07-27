@@ -32,7 +32,7 @@ public:
                          const QString &normalTextColor = "#54626F",
                          const QString &darkTextColor = "#FDFDFD");
 
-    //指定导航面板样式,带图标和效果切换
+    //指定左侧的导航面板样式,带图标和效果切换
     void setStyle(QWidget *widget, QList<QToolButton *> btns, QList<int> pixChar,
                   quint32 iconSize = 9, quint32 iconWidth = 10, quint32 iconHeight = 10,
                   const QString &type = "left", int borderWidth = 3,

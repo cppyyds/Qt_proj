@@ -5,7 +5,7 @@
 #include "qwidget.h"
 
 AppInit *AppInit::self = 0;
-QMutex mutex;
+static QMutex mutex;
 AppInit *AppInit::Instance()
 {
     if (!self) {
