@@ -13,18 +13,23 @@ class EntryWidget : public QWidget
 
 public:
     enum Type{
-        TEXT = 0,
+        TEXT = 1,
         VIDEO,
         PICTURE,
         AUDIO,
         LIVE
     };
     explicit EntryWidget(QWidget *parent = nullptr);
-    EntryWidget(const QString& name, Type typeQ, QWidget *parent = nullptr);
+    EntryWidget(Type type, const QString& name = QString::fromLocal8Bit("标题名称"), QWidget *parent = nullptr);
     ~EntryWidget();
+
+    Type getType() const;
 
 private:
     Ui::EntryWidget *ui;
+
+    Type type_;
+    QString name_;
 };
 
 #endif // ENTRYWIDGET_H

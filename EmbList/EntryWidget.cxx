@@ -9,9 +9,11 @@ EntryWidget::EntryWidget(QWidget *parent) :
     ui->setupUi(this);
 }
 
-EntryWidget::EntryWidget(const QString &name, Type type, QWidget *parent):
+EntryWidget::EntryWidget(Type type, const QString &name, QWidget *parent):
     QWidget(parent),
-    ui(new Ui::EntryWidget)
+    ui(new Ui::EntryWidget),
+    type_(type),
+    name_(name)
 {
     ui->setupUi(this);
     ui->name->setText(name);
@@ -41,4 +43,9 @@ EntryWidget::EntryWidget(const QString &name, Type type, QWidget *parent):
 EntryWidget::~EntryWidget()
 {
     delete ui;
+}
+
+EntryWidget::Type EntryWidget::getType() const
+{
+    return type_;
 }

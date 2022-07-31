@@ -17,7 +17,8 @@ SOURCES += \
 HEADERS += \
     EmbList.h \
     EntryWidget.h \
-    IconHelper.h
+    IconHelper.h \
+    common.h
 
 FORMS += \
     EmbList.ui \
