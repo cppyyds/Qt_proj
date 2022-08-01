@@ -55,7 +55,7 @@ border-style:none;
 
 QWidget[nav="left"] QAbstractButton:hover{
 color:#FFFFFF;
-background-color:#00BB9E;
+border-color:#00BB9E;
 }
 
 QWidget[nav="left"] QAbstractButton:checked,QWidget[nav="left"] QAbstractButton:pressed{

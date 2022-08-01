@@ -27,6 +27,9 @@ public:
     QToolButton *toolButton_3;
     QStackedWidget *stackedWidget;
     QWidget *page;
+    QToolButton *toolButton_4;
+    QToolButton *toolButton_5;
+    QToolButton *toolButton_6;
     QWidget *page_2;
 
     void setupUi(QWidget *HToolBar)
@@ -54,6 +57,15 @@ public:
         stackedWidget->setGeometry(QRect(0, 70, 681, 531));
         page = new QWidget();
         page->setObjectName(QString::fromUtf8("page"));
+        toolButton_4 = new QToolButton(page);
+        toolButton_4->setObjectName(QString::fromUtf8("toolButton_4"));
+        toolButton_4->setGeometry(QRect(200, 20, 101, 71));
+        toolButton_5 = new QToolButton(page);
+        toolButton_5->setObjectName(QString::fromUtf8("toolButton_5"));
+        toolButton_5->setGeometry(QRect(100, 20, 101, 71));
+        toolButton_6 = new QToolButton(page);
+        toolButton_6->setObjectName(QString::fromUtf8("toolButton_6"));
+        toolButton_6->setGeometry(QRect(0, 20, 101, 71));
         stackedWidget->addWidget(page);
         page_2 = new QWidget();
         page_2->setObjectName(QString::fromUtf8("page_2"));
@@ -70,6 +82,9 @@ public:
         toolButton->setText(QCoreApplication::translate("HToolBar", "\346\234\254\345\234\260\345\257\274\345\207\272\350\256\276\347\275\256", nullptr));
         toolButton_2->setText(QCoreApplication::translate("HToolBar", "\344\272\221\347\253\257\345\257\274\345\207\272\350\256\276\347\275\256", nullptr));
         toolButton_3->setText(QCoreApplication::translate("HToolBar", "MP4\345\257\274\345\207\272\350\256\276\347\275\256", nullptr));
+        toolButton_4->setText(QCoreApplication::translate("HToolBar", "MP4\345\257\274\345\207\272\350\256\276\347\275\256", nullptr));
+        toolButton_5->setText(QCoreApplication::translate("HToolBar", "\344\272\221\347\253\257\345\257\274\345\207\272\350\256\276\347\275\256", nullptr));
+        toolButton_6->setText(QCoreApplication::translate("HToolBar", "\346\234\254\345\234\260\345\257\274\345\207\272\350\256\276\347\275\256", nullptr));
     } // retranslateUi
 
 };
